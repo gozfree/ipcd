@@ -21,6 +21,7 @@
 #include <libgzf.h>
 #include <libworkq.h>
 #include <libipc.h>
+#include "ext/ipcd_example.h"
 
 //static struct ipc *_ipcd = NULL;
 
@@ -29,6 +30,7 @@ int ipcd_init()
     struct ipc *ipc = NULL;
     ipc = ipc_create(IPC_RECVER);
 
+    ipcd_group_register();
     return 0;
 }
 
@@ -36,7 +38,6 @@ int ipcd_dispatch()
 {
     while (1) {
         sleep(1);
-        logi("wait message\n");
     }
 
     return 0;

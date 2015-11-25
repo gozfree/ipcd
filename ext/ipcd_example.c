@@ -26,23 +26,64 @@
 #include "ipcd.h"
 #include "libipc_stub.h"
 
+struct calc_args {
+    int32_t left;
+    int32_t right;
+    int32_t opcode;
+};
+
 static int on_test(struct ipc *r, void *in_arg, size_t in_len,
-                void *out_arg, size_t out_len)
+                void *out_arg, size_t *out_len)
 {
     logi("on_test\n");
     return 0;
 }
 
 static int on_get_connect_list(struct ipc *r, void *in_arg, size_t in_len,
-                void *out_arg, size_t out_len)
+                void *out_arg, size_t *out_len)
 {
     logi("on_test\n");
     return 0;
 }
 
+static int on_calc(struct ipc *r, void *in_arg, size_t in_len,
+                void *out_arg, size_t *out_len)
+{
+    int val = 0;
+    struct calc_args *args = (struct calc_args *)in_arg;
+    logi("in_len = %d, calc left = %d, right = %d, opcode = %c\n", in_len, args->left, args->right, args->opcode);
+    switch (args->opcode) {
+    case '+':
+        val = args->left + args->right;
+        break;
+    case '-':
+        val = args->left - args->right;
+        break;
+    case '*':
+        val = args->left * args->right;
+        break;
+    case '/':
+        if (args->right == 0) {
+            loge("div zero error!\n");
+            break;
+        }
+        val = args->left / args->right;
+        break;
+    default:
+        loge("unknown\n");
+        break;
+    }
+    logi("after calc, val = %d\n", val);
+    memcpy(out_arg, &val, sizeof(val));
+    *out_len = sizeof(val);
+    return 0;
+}
+
+
 BEGIN_IPC_MAP(EXAMPLE_IPC_API)
 IPC_ACTION(IPC_TEST, on_test)
 IPC_ACTION(IPC_GET_CONNECT_LIST, on_get_connect_list)
+IPC_ACTION(IPC_CALC, on_calc)
 END_IPC_MAP()
 
 int ipcd_group_register()
