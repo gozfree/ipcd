@@ -20,6 +20,7 @@
 #include <libdict.h>
 #include <libskt.h>
 #include <libgzf.h>
+#include <libosal.h>
 #include <libworkq.h>
 #include <libipc.h>
 #include "ipcd_example.h"
@@ -79,11 +80,23 @@ static int on_calc(struct ipc *r, void *in_arg, size_t in_len,
     return 0;
 }
 
+static int on_shell_help(struct ipc *r, void *in_arg, size_t in_len,
+                void *out_arg, size_t *out_len)
+{
+    char buf[1024];
+    char *cmd = (char *)in_arg;
+    memset(buf, 0, sizeof(buf));
+    system_with_result(cmd, buf, sizeof(buf));
+    memcpy(out_arg, buf, strlen(buf));
+    *out_len = strlen(buf);
+    return 0;
+}
 
 BEGIN_IPC_MAP(EXAMPLE_IPC_API)
-IPC_ACTION(IPC_TEST, on_test)
-IPC_ACTION(IPC_GET_CONNECT_LIST, on_get_connect_list)
-IPC_ACTION(IPC_CALC, on_calc)
+IPC_MAP(IPC_TEST, on_test)
+IPC_MAP(IPC_GET_CONNECT_LIST, on_get_connect_list)
+IPC_MAP(IPC_SHELL_HELP, on_shell_help)
+IPC_MAP(IPC_CALC, on_calc)
 END_IPC_MAP()
 
 int ipcd_group_register()

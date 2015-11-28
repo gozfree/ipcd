@@ -43,6 +43,7 @@ LDFLAGS	+= -pthread
 LDFLAGS	+= -lgcc_s -lc
 LDFLAGS += -L$(OUTPUT)/lib
 LDFLAGS	+= -lgzf
+LDFLAGS	+= -losal
 LDFLAGS	+= -llog
 LDFLAGS	+= -lgevent
 LDFLAGS	+= -lskt
