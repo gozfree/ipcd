@@ -28,7 +28,7 @@
 int ipcd_init()
 {
     struct ipc *ipc = NULL;
-    ipc = ipc_create(IPC_RECVER);
+    ipc = ipc_create(IPC_SERVER, 5555);
 
     ipcd_group_register();
     return 0;
