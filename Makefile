@@ -45,11 +45,12 @@ LDFLAGS += -L$(OUTPUT)/lib
 LDFLAGS	+= -lgzf
 LDFLAGS	+= -losal
 LDFLAGS	+= -llog
-LDFLAGS	+= -lgevent
 LDFLAGS	+= -lskt
 LDFLAGS	+= -ldict
 LDFLAGS	+= -lworkq
 LDFLAGS	+= -lipc
+LDFLAGS	+= -lgevent
+LDFLAGS	+= -lthread
 LDFLAGS	+= -lrt
 
 .PHONY : all clean
