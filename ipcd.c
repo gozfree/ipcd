@@ -28,7 +28,11 @@
 int ipcd_init()
 {
     struct ipc *ipc = NULL;
-    ipc = ipc_create(IPC_SERVER, 5555);
+    ipc = ipc_create(IPC_SERVER, IPC_SERVER_PORT);
+    if (ipc == NULL) {
+        loge("ipc_create failed!\n");
+        return -1;
+    }
 
     ipcd_group_register();
     return 0;
@@ -75,7 +79,10 @@ int main(int argc, char **argv)
     }
     log_set_level(LOG_INFO);
     signal(SIGINT , ctrl_c_op);
-    ipcd_init();
+    if (-1 == ipcd_init()) {
+        loge("ipcd_init failed!\n");
+    }
+    logi("ipcd is running...\n");
     ipcd_dispatch();
     ipcd_deinit();
     return 0;

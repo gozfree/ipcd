@@ -49,8 +49,9 @@ LDFLAGS	+= -lskt
 LDFLAGS	+= -ldict
 LDFLAGS	+= -lworkq
 LDFLAGS	+= -lipc
-LDFLAGS	+= -lgevent
 LDFLAGS	+= -lthread
+LDFLAGS	+= -lgevent
+LDFLAGS	+= -ldict
 LDFLAGS	+= -lrt
 
 .PHONY : all clean
