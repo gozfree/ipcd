@@ -19,9 +19,6 @@
 #include <libgevent.h>
 #include <libdict.h>
 #include <libskt.h>
-#include <libgzf.h>
-#include <libosal.h>
-#include <libworkq.h>
 #include <libipc.h>
 #include "ipcd_example.h"
 #include "ipcd.h"

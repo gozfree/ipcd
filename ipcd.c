@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <stdbool.h>
 #include <stdarg.h>
 #include <string.h>
 #include <signal.h>
@@ -18,18 +19,16 @@
 #include <libgevent.h>
 #include <libdict.h>
 #include <libskt.h>
-#include <libgzf.h>
-#include <libworkq.h>
 #include <libipc.h>
 #include "ext/ipcd_example.h"
 
-//static struct ipc *_ipcd = NULL;
+static struct ipc *g_ipcd = NULL;
+static bool run = false;
 
 int ipcd_init()
 {
-    struct ipc *ipc = NULL;
-    ipc = ipc_create(IPC_SERVER, IPC_SERVER_PORT);
-    if (ipc == NULL) {
+    g_ipcd = ipc_create(IPC_SERVER, IPC_SERVER_PORT);
+    if (g_ipcd == NULL) {
         loge("ipc_create failed!\n");
         return -1;
     }
@@ -40,7 +39,8 @@ int ipcd_init()
 
 int ipcd_dispatch()
 {
-    while (1) {
+    run = true;
+    while (run) {
         sleep(1);
     }
 
@@ -49,7 +49,7 @@ int ipcd_dispatch()
 
 void ipcd_deinit()
 {
-
+    ipc_destroy(g_ipcd);
 }
 
 void usage()
@@ -60,7 +60,9 @@ void usage()
 
 void ctrl_c_op(int signo)
 {
-    exit(0);
+    run = false;
+    printf("xxx\n");
+    ipcd_deinit();
 }
 
 int main(int argc, char **argv)
